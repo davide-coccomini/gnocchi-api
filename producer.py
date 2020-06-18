@@ -8,6 +8,8 @@ import random
 import threading
 from datetime import datetime, timedelta
 
+#sys.argv[1] = archive_policy_name
+
 def get_token():
     global token
     global token_time
@@ -17,7 +19,7 @@ def get_token():
     if m:
         token = m.group(1)[11:-5]
         token_time = datetime.now()
-        print(token)
+        #print(token)
 
 def list_metrics():
     global token
@@ -26,7 +28,7 @@ def list_metrics():
     r = requests.get(url, headers=headers).json()
     for i in r:
         if i["archive_policy"]["name"] == sys.argv[1]:
-            print(i)
+            #print(i)
             return i["id"]
     #print(r)
     #return r[0]["id"]
@@ -40,8 +42,10 @@ def post_values():
     	get_token()
 
     id_metric = list_metrics()
+    value = random.uniform(0.0,40.0)
     url = 'http://252.3.27.148:8041/v1/metric/'+str(id_metric)+'/measures'
-    data = [{"timestamp":str(datetime.now()), "value":random.uniform(0.0,40.0)}]
+    data = [{"timestamp":str(datetime.now()), "value":value}]
+    print(sys.argv[1]+" measured: "+str(value))
     headers = {'Content-type': 'application/json', 'Content-Length':str(len(json.dumps(data))), 'X-Auth-Token':token}
     requests.post(url, data=json.dumps(data), headers=headers)
 
