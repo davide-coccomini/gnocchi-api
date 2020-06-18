@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 def get_token():
     global token
     global token_time
-    p = subprocess.Popen('openstack token issue', shell=True, stdout=subprocess.PIPE)  
+    p = subprocess.Popen('openstack token issue', shell=True, stdout=subprocess.PIPE)
     output = p.communicate()[0]
     m = re.search('id(.+?)project_id', str(output))
     if m:
@@ -28,11 +28,14 @@ def list_metrics():
     if len(r) == 0:
         return None
     else:
-        return r[0]["id"]
+        for i in r:
+            if i["archive_policy"]["name"] == sys.argv[2]:
+                id_metric = i["id"]
+        return i["id"]
 
 def get_metric(metric):
     global token
-    threading.Timer(20.0, get_metric).start()
+    threading.Timer(20.0, get_metric, [metric]).start()
     if token == None or token_time < datetime.now() - timedelta(hours = 1):
         get_token()
     id_metric = list_metrics()
@@ -51,6 +54,7 @@ token = None
 token_time = None
 
 metric = sys.argv[1]
+
 get_metric(metric)
 
 

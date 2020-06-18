@@ -24,17 +24,12 @@ def list_metrics():
     url = 'http://252.3.27.148:8041/v1/metric'
     headers = {'X-Auth-Token':token}
     r = requests.get(url, headers=headers).json()
-    print(r)
-    return r[0]["id"]
-
-def get_metric():
-    global token
-    id_metric = list_metrics()
-    print(id_metric)
-    url = 'http://252.3.27.148:8041/v1/metric/'+str(id_metric)+'/measures?aggregation=max'
-    headers = {'X-Auth-Token':token}
-    r = requests.get(url, headers=headers).json()
-    print(r)
+    for i in r:
+        if i["archive_policy"]["name"] == sys.argv[1]:
+            print(i)
+            return i["id"]
+    #print(r)
+    #return r[0]["id"]
 
 
 def post_values():
