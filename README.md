@@ -1,4 +1,4 @@
-# gnocchi-api
+# Gnocchi project
 
 ## consumer.py
 It contains the consumer code, which periodically (every 20 seconds) retrieves the saved data from a metric.
