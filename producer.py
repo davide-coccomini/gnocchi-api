@@ -19,7 +19,6 @@ def get_token():
     if m:
         token = m.group(1)[11:-5]
         token_time = datetime.now()
-        #print(token)
 
 def list_metrics():
     global token
@@ -28,10 +27,7 @@ def list_metrics():
     r = requests.get(url, headers=headers).json()
     for i in r:
         if i["archive_policy"]["name"] == sys.argv[1]:
-            #print(i)
             return i["id"]
-    #print(r)
-    #return r[0]["id"]
 
 
 def post_values():

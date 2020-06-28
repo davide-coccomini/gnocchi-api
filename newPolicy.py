@@ -19,7 +19,6 @@ def get_token():
     if m:
         token = m.group(1)[11:-5]
         token_time = datetime.now()
-        print(token)
 
 def add_metric():
     global token
@@ -30,7 +29,6 @@ def add_metric():
     data = {"archive_policy_name": str(sys.argv[1])}
     headers = {'Content-type': 'application/json', 'Content-Length':str(len(json.dumps(data))), 'X-Auth-Token':token}
     r = requests.post(url, data=json.dumps(data), headers=headers)
-    print(r)
 
 def add_policy():
     global token
@@ -41,8 +39,8 @@ def add_policy():
     data = {"back_window":0,"definition":[{"granularity":str(sys.argv[2]),"points":int(sys.argv[3])}],"name":str(sys.argv[1])}
     headers = {'Content-type': 'application/json', 'Content-Length':str(len(json.dumps(data))), 'X-Auth-Token':token}
     r = requests.post(url, data=json.dumps(data), headers=headers)
-    print(r)
     add_metric()
+    print("New metric added")
 
 token = None
 token_time = None
