@@ -39,6 +39,7 @@ def get_metric(aggregation, metric):
     id_metric = get_metric_id(metric)
     if id_metric != None:
         url = 'http://252.3.27.148:8041/v1/metric/'+str(id_metric)+'/measures?aggregation='+aggregation
+
         headers = {'X-Auth-Token':token}
         r = requests.get(url, headers=headers).json()
         if len(r) == 0:

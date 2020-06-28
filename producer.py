@@ -20,24 +20,24 @@ def get_token():
         token = m.group(1)[11:-5]
         token_time = datetime.now()
 
-def list_metrics():
+def get_metric_id(metric):
     global token
     url = 'http://252.3.27.148:8041/v1/metric'
     headers = {'X-Auth-Token':token}
     r = requests.get(url, headers=headers).json()
     for i in r:
-        if i["archive_policy"]["name"] == sys.argv[1]:
+        if i["archive_policy"]["name"] == metric:
             return i["id"]
 
 
-def post_values():
+def post_values(metric):
     global token
     global token_time
-    threading.Timer(5.0, post_values).start()
+    threading.Timer(5.0, post_values,[metric]).start()
     if token == None or token_time < datetime.now() - timedelta(hours = 1):
     	get_token()
 
-    id_metric = list_metrics()
+    id_metric = get_metric_id(metric)
     value = random.uniform(0.0,40.0)
     url = 'http://252.3.27.148:8041/v1/metric/'+str(id_metric)+'/measures'
     data = [{"timestamp":str(datetime.now()), "value":value}]
@@ -48,6 +48,6 @@ def post_values():
 token = None
 token_time = None
 
-post_values()
+post_values(sys.argv[1])
 
 
